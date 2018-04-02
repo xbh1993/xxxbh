@@ -15,6 +15,7 @@ class GoodsCategory extends Main
 {
     public function lists()
     {
+
         $where = [];
         $pid = 0;
         $d = request()->get();
@@ -37,8 +38,11 @@ class GoodsCategory extends Main
     public function addCategory()
     {
         if (request()->isGet()) {
-            $category = Db::name('goodsCategory')->where('types',1)->field('id,title,pid')->order('sort desc')->select();
+            $types=request()->get('types')?request()->get('types'):1;
+            $where['types']=$types;
+            $category = Db::name('goodsCategory')->where($where)->field('id,title,pid')->order('sort desc')->select();
             $category = array2level($category);
+            $this->assign('types',$types);
             $this->assign('cates', $category);
             return $this->fetch();
         }
@@ -53,7 +57,6 @@ class GoodsCategory extends Main
             try {
                 $d['add_time'] = time();
                 $d['update_time'] = time();
-                $d['types']=1;
                 Db::name('GoodsCategory')->insert($d);
                 return json_code(200, '新增成功');
             } catch (\Exception $e) {
