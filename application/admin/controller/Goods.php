@@ -11,6 +11,7 @@ use think\Validate;
 use app\admin\model\Goods as GoodsModel;
 class Goods extends Main{
 
+
     public function lists(){
         $lists=Db::name('goods')->select();//获取所有的商品列表
         $this->assign('lists',$lists);
