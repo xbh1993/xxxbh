@@ -85,4 +85,26 @@ class GoodsCategory extends Main
             return json_code(1,$str);
         }
     }
+
+    //文章分类
+    public function articleCateLists()
+    {
+        $where = [];
+        $pid = 0;
+        $d = request()->get();
+        if (isset($d['id']) && !empty($d['id'])) {
+            $where['pid'] = $d['id'];
+            $pid = $d['id'];
+        };
+        $where['types']=2;//商品分类
+        $lists = Db::name('GoodsCategory')
+            ->where($where)
+            ->order('sort desc,add_time desc')
+            ->field('id,title,sort,update_time,pid,status')
+            ->select();
+
+        $lists = arrayCounts($lists, $pid);
+        $this->assign('lists', $lists);
+        return $this->fetch();
+    }
 }
