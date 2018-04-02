@@ -22,6 +22,7 @@ class GoodsCategory extends Main
             $where['pid'] = $d['id'];
             $pid = $d['id'];
         };
+        $where['types']=1;//商品分类
         $lists = Db::name('GoodsCategory')
             ->where($where)
             ->order('sort desc,add_time desc')
@@ -36,7 +37,7 @@ class GoodsCategory extends Main
     public function addCategory()
     {
         if (request()->isGet()) {
-            $category = Db::name('goodsCategory')->field('id,title,pid')->order('sort desc')->select();
+            $category = Db::name('goodsCategory')->where('types',1)->field('id,title,pid')->order('sort desc')->select();
             $category = array2level($category);
             $this->assign('cates', $category);
             return $this->fetch();
@@ -52,6 +53,7 @@ class GoodsCategory extends Main
             try {
                 $d['add_time'] = time();
                 $d['update_time'] = time();
+                $d['types']=1;
                 Db::name('GoodsCategory')->insert($d);
                 return json_code(200, '新增成功');
             } catch (\Exception $e) {

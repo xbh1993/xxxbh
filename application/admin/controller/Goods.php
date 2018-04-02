@@ -37,7 +37,7 @@ class Goods extends Main{
             }
 
         }
-        $category = Db::name('goodsCategory')->field('id,title,pid')->order('sort desc')->select();
+        $category = Db::name('goodsCategory')->where('types',1)->field('id,title,pid')->order('sort desc')->select();
         $category = array2level($category);
         $this->assign('cates', $category);
         return $this->fetch();
