@@ -8,14 +8,17 @@
     header {
         color: black;
     }
+
     .imgs {
         height: 100px;
         width: 100px;
         margin: 5px 10px;
     }
+
     .item {
         float: left;
     }
+
     .item span {
         position: relative;
         display: block;
@@ -25,6 +28,7 @@
         background-color: black;
         margin: 0px 7px;
         height: 22px;
+        cursor: pointer;
     }
 </style>
 
@@ -36,7 +40,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">商品名称12</label>
             <div class="layui-input-block">
-                <input type="text" id="title" name="title"  autocomplete="off"
+                <input type="text" id="title" name="title" autocomplete="off"
                        placeholder="请输入商品名称" class="layui-input">
             </div>
         </div>
@@ -76,7 +80,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">商品简介</label>
             <div class="layui-input-block">
-               <textarea name="describle" placeholder="请输入商品简介" class="layui-textarea"></textarea>
+                <textarea name="describle" placeholder="请输入商品简介" class="layui-textarea"></textarea>
             </div>
         </div>
 
@@ -112,14 +116,15 @@
             </div>
         </div>
 
-        <div class="layui-form-item" >
+        <div class="layui-form-item">
             <label class="layui-form-label">商品详情</label>
             <div class="layui-input-block">
-               <textarea class="layui-textarea" style="height: 300px" id="myEditor" name="text" placeholder="输入商品详情"></textarea>
+                <textarea class="layui-textarea" style="height: 300px" id="myEditor" name="text"
+                          placeholder="输入商品详情"></textarea>
             </div>
         </div>
 
-        <div class="layui-form-item" >
+        <div class="layui-form-item">
             <div class="layui-input-block">
                 <button style="margin-left: 20%" class="layui-btn" lay-submit="" lay-filter="toSubmit">提交</button>
                 <button id="reset" type="reset" class="layui-btn layui-btn-primary">重置</button>
@@ -137,6 +142,9 @@
     var layer = layui.layer;
     var upload = layui.upload;
 
+    function delimg(obj) {
+        $(obj).parent().remove();
+    }
 
     var uploadInst = upload.render({
         elem: '#uploadone' //绑定元素
@@ -148,7 +156,6 @@
                 var html = "<div class='item'>" +
                     "<img class='imgs' src='" + res.data.img_url + "'>" +
                     "<input type='hidden' value='" + res.data.img_url + "' name='img_url' />" +
-                    "<span>删除</span>" +
                     "</div>";
                 $('#bigImg').find('.item').remove();
                 $('#bigImg').append(html);
@@ -169,7 +176,7 @@
                 var html = "<div class='item'>" +
                     "<img class='imgs' src='" + res.data.img_url + "'>" +
                     "<input type='hidden' value='" + res.data.img_url + "' name='img_urls[]' />" +
-                    "<span>删除</span>" +
+                    "<span onclick='delimg(this)'>删除</span>" +
                     "</div>";
                 $('#imgs').append(html);
             }
@@ -180,42 +187,39 @@
     });
 
 
-
-
-
-        $(document).ready(function(){
-            var options = {
-                type:'post',           //post提交
-                //url:'http://ask.tongzhuo100.com/server/****.php?='+Math.random(),   //url
-                dataType:"json",        //json格式
-                data:{},    //如果需要提交附加参数，视情况添加
-                clearForm: false,        //成功提交后，清除所有表单元素的值
-                resetForm: false,        //成功提交后，重置所有表单元素的值
-                cache:false,
-                async:false,          //同步返回
-                success:function(data){
-                    console.log(data);
-                    if(data.code==0){
-                        layer.msg(data.msg);
-                    }else{
-                        layer.msg(data.msg,{icon:1,time:500},function(){
-                            $("#reset").click();
-                            x_admin_close();
-                            parent.location.reload();
-                        });
-                    }
-                    //服务器端返回处理逻辑
-                },
-                error:function(XmlHttpRequest,textStatus,errorThrown){
-                    layer.msg('操作失败:服务器处理失败');
+    $(document).ready(function () {
+        var options = {
+            type: 'post',           //post提交
+            dataType: "json",        //json格式
+            data: {},    //如果需要提交附加参数，视情况添加
+            clearForm: false,        //成功提交后，清除所有表单元素的值
+            resetForm: false,        //成功提交后，重置所有表单元素的值
+            cache: false,
+            async: false,          //同步返回
+            success: function (data) {
+                console.log(data);
+                if (data.code == 0) {
+                    layer.msg(data.msg);
+                } else {
+                    layer.msg(data.msg, {icon: 1, time: 500}, function () {
+                        $("#reset").click();
+                        x_admin_close();
+                        parent.location.reload();
+                    });
                 }
-            };
-            // bind form using 'ajaxForm'
-            $('#mainForm').ajaxForm(options).submit(function(data){
-                //无逻辑
-            });
-
+                //服务器端返回处理逻辑
+            },
+            error: function (XmlHttpRequest, textStatus, errorThrown) {
+                layer.msg('操作失败:服务器处理失败');
+            }
+        };
+        // bind form using 'ajaxForm'
+        $('#mainForm').ajaxForm(options).submit(function (data) {
+            //无逻辑
         });
+
+
+    });
 
 </script>
 {include file='public/foot'}
