@@ -346,3 +346,7 @@
         $sign=openssl_decrypt($str,'AES-128-CBC',$encryptKey,0,$localIV);
         return $sign;
     }
+
+    function text(){
+        halt(12312);
+    }
