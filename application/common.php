@@ -336,17 +336,36 @@
     }
 
     //新AES加密
-    function encrypt($str, $localIv, $encryptKey)
+    function encrypt($data)
     {
-        $sign = openssl_encrypt($str, 'AES-128-CBC', $encryptKey, 0, $localIv);
+        ksort($data);
+        $str = http_build_query($data);
+        $localIV = 'GUXANGXIYOUYUNWL';
+        $encryptKey = 'GUANGXIYOUYUNWANGLUOKEJIYOUXIANGONGSI';
+        $sign = openssl_encrypt($str, 'AES-128-CBC', $encryptKey, 0, $localIV);
         return $sign;
     }
 
-    function decrypt($str,$localIV,$encryptKey){
-        $sign=openssl_decrypt($str,'AES-128-CBC',$encryptKey,0,$localIV);
+    function decrypt($str)
+    {
+        $localIV = 'GUXANGXIYOUYUNWL';
+        $encryptKey = 'GUANGXIYOUYUNWANGLUOKEJIYOUXIANGONGSI';
+        $sign = openssl_decrypt($str, 'AES-128-CBC', $encryptKey, 0, $localIV);
         return $sign;
     }
 
-    function text(){
+    function text()
+    {
         halt(12312);
+    }
+
+    function checksign($data)
+    {
+        $sign = $data['sign'];
+        $str = decrypt($sign);
+        parse_str($str, $arr);
+        if (!is_array($arr) || empty($arr['did']) || $arr['did'] != $data['did']) return false;
+        if (empty($arr['version']) || $arr['version'] != $data['version']) return false;
+        if (empty($arr['types']) || $arr['types'] != $data['types']) return false;
+        if (empty($arr['appid']) || $arr['appid'] != $data['appid']) return false;
     }

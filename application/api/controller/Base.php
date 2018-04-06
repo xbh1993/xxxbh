@@ -17,12 +17,15 @@ class Base extends Controller{
     protected function checkAuthRequest(){
         $header=request()->header();
         if(empty($header['sign'])) throw  new ApiException('sign不存在',400);
-        if(empty($header['did'])) throw new ApiException('did不合法',400);
-        if(empty($header['types'])) throw new ApiException('types不合法',400);
-        $iv='1234567890123456';
-        $key='1234567891234567';
-        $sign=encrypt('xbh19931129',$iv,$key);
-        halt($sign);
+        if(empty($header['did'])) throw new ApiException('did不存在',400);
+        if(empty($header['types'])) throw new ApiException('types不存在',400);
+
+        //加密字段
+//        $arr=['appid'=>$header['appid'],'version'=>$header['version'],'types'=>$header['types'],'did'=>$header['did']];
+//        $sign=encrypt($arr);
+//         halt($sign);
+        if(!checksign($header)) throw  new ApiException('sign不合法',400);
+
     }
 
 
