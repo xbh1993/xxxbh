@@ -368,4 +368,5 @@
         if (empty($arr['version']) || $arr['version'] != $data['version']) return false;
         if (empty($arr['types']) || $arr['types'] != $data['types']) return false;
         if (empty($arr['appid']) || $arr['appid'] != $data['appid']) return false;
+        return true;
     }
